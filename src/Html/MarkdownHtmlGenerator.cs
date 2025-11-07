@@ -42,6 +42,7 @@ public static class MarkdownHtmlGenerator
         ArgumentNullException.ThrowIfNull(node);
 
         using var writer = new StringWriter(new StringBuilder(capacity: 1024));
+        writer.NewLine = "\n";
         var htmlWriter = new MarkdownHtmlWriter(writer, options ?? MarkdownHtmlOptions.Default);
         htmlWriter.Visit(node);
         htmlWriter.Complete();
