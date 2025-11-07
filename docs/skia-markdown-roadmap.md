@@ -127,7 +127,8 @@
      - `MarkdownView` adds keyboard shortcuts, clipboard integration, context menus, and automation peer support so assistive technologies receive the synthesized document text.
    - [x] 8.4 Provide design-time previewer integration and sample pages referencing `/Users/wieslawsoltes/GitHub/Avalonia`.
      - `MarkdownView` populates a design-mode sample document so Avalonia previewers render ready-to-inspect content, including links into the local Avalonia repository.
-     - Added `SkiaMarkdown.AvaloniaPreview` sample app and `MainWindow.axaml` showcasing `MarkdownView` with design data pointing to `/Users/wieslawsoltes/GitHub/Avalonia`.
+    - Ship the `SkiaMarkdown.AvaloniaPlayground` sample (created via `dotnet new avalonia.app`) that wires a live `MarkdownView` beside an AvaloniaEdit Markdown editor sharing a `TextDocument` with the SkiaMarkdown pipeline, giving consumers a ready-made integration blueprint.
+    - Added a synchronized Markdown AST tree view driven by document change events so editing stays in lockstep with structural inspection.
 
 9. [ ] Phase 9 – Performance & Memory Optimization
    - [ ] 9.1 Profile parser and renderer with BenchmarkDotNet, TraceEvent, and dotnet-counters to capture baseline metrics.

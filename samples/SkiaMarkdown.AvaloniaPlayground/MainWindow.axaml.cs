@@ -1,7 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 
-namespace SkiaMarkdown.AvaloniaPreview;
+namespace SkiaMarkdown.AvaloniaPlayground;
 
 public partial class MainWindow : Window
 {
@@ -9,6 +8,5 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext ??= new MainWindowViewModel();
-        //this.AttachDevTools();
     }
 }

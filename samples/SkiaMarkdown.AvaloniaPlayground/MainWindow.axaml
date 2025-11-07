@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:SkiaMarkdown.Avalonia.Controls;assembly=SkiaMarkdown.Avalonia"
+        xmlns:vm="clr-namespace:SkiaMarkdown.AvaloniaPlayground"
+        xmlns:avaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        mc:Ignorable="d"
+        d:DesignWidth="1400"
+        d:DesignHeight="800"
+        x:Class="SkiaMarkdown.AvaloniaPlayground.MainWindow"
+        Title="SkiaMarkdown Playground">
+    <Window.Resources>
+        <TreeDataTemplate x:Key="AstNodeTemplate"
+                          DataType="vm:AstNodeViewModel"
+                          ItemsSource="{Binding Children}">
+            <StackPanel Margin="4,2">
+                <TextBlock Text="{Binding Title}"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="{Binding Details}"
+                           FontSize="12"
+                           Foreground="{DynamicResource ThemeForegroundLowBrush}"
+                           TextWrapping="Wrap"
+                           Margin="0,2,0,0" />
+            </StackPanel>
+        </TreeDataTemplate>
+    </Window.Resources>
+
+    <Grid ColumnDefinitions="2*,3*"
+          RowDefinitions="Auto,*"
+          Margin="12">
+        <TextBlock Grid.ColumnSpan="2"
+                   Margin="0,0,0,8"
+                   FontSize="20"
+                   FontWeight="SemiBold"
+                   Text="Markdown + XAML Playground" />
+
+        <Grid Grid.Row="1"
+              Margin="0,0,12,0">
+            <avaloniaEdit:TextEditor Grid.Row="0"
+                                     ShowLineNumbers="True"
+                                     HorizontalScrollBarVisibility="Auto"
+                                     VerticalScrollBarVisibility="Auto"
+                                     FontFamily="Consolas, Menlo, monospace"
+                                     Document="{Binding MarkdownDocument}" />
+        </Grid>
+
+        <TabControl Grid.Row="1"
+                    Grid.Column="1">
+            <TabItem Header="Preview">
+                <Border Margin="0,0,0,0"
+                        BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                        BorderThickness="1"
+                        Padding="0">
+                    <controls:MarkdownView CanvasWidth="920"
+                                           Markdown="{Binding MarkdownSource}" />
+                </Border>
+            </TabItem>
+            <TabItem Header="Markdown AST">
+                <Border Margin="0,0,0,0"
+                        BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                        BorderThickness="1"
+                        Padding="4">
+                    <TreeView ItemsSource="{Binding MarkdownAst}"
+                              ItemTemplate="{StaticResource AstNodeTemplate}" />
+                </Border>
+            </TabItem>
+            <TabItem Header="Roslyn AST">
+                <Border Margin="0,0,0,0"
+                        BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                        BorderThickness="1"
+                        Padding="4">
+                    <TreeView ItemsSource="{Binding RoslynAst}"
+                              ItemTemplate="{StaticResource AstNodeTemplate}" />
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
