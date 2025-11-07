@@ -119,7 +119,6 @@ var view = new MarkdownView
             }
         };
 
-        ContextRequested += OnContextRequested;
     }
 
     public event EventHandler<MarkdownLinkEventArgs>? LinkClicked;
@@ -151,6 +150,16 @@ var view = new MarkdownView
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+
+        if (change.Property == Visual.IsVisibleProperty && change.GetNewValue<bool>())
+        {
+            if (_document is null && !string.IsNullOrEmpty(Markdown))
+            {
+                UpdateDocument(Markdown);
+            }
+
+            _presenter.RequestRefresh(refreshScroll: true);
+        }
 
         if (change.Property == MarkdownProperty)
         {
@@ -202,13 +211,17 @@ var view = new MarkdownView
         _presenter.Document = null;
         _presenter.LinkClicked -= OnPresenterLinkClicked;
         ContextRequested -= OnContextRequested;
-
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         _presenter.LinkClicked += OnPresenterLinkClicked;
+        ContextRequested += OnContextRequested;
+
+        UpdateDocument(Markdown);
+        _presenter.RequestRefresh(refreshScroll: true);
+
         if (Design.IsDesignMode && string.IsNullOrEmpty(Markdown))
         {
             SetCurrentValue(MarkdownProperty, DesignPreviewMarkdownContent);
