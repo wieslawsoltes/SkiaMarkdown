@@ -57,7 +57,6 @@ var view = new MarkdownView
     private readonly MarkdownPipeline _pipeline;
     private readonly MarkdownRenderer _renderer;
     private readonly MarkdownScrollPresenter _presenter;
-    private readonly IServiceProvider? _serviceProvider;
     private readonly MenuFlyout _contextFlyout;
     private readonly MenuItem _copyMenuItem;
     private readonly MenuItem _copyMarkdownMenuItem;
@@ -81,7 +80,6 @@ var view = new MarkdownView
             serviceProvider.GetRequiredService<MarkdownPipeline>(),
             serviceProvider.GetRequiredService<MarkdownRenderer>())
     {
-        _serviceProvider = serviceProvider;
     }
 
     public MarkdownView(MarkdownPipeline pipeline, MarkdownRenderer renderer)
@@ -205,10 +203,6 @@ var view = new MarkdownView
         _presenter.LinkClicked -= OnPresenterLinkClicked;
         ContextRequested -= OnContextRequested;
 
-        if (_serviceProvider is IDisposable disposable)
-        {
-            disposable.Dispose();
-        }
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
