@@ -12,6 +12,7 @@
     <PackageVersion Include="SkiaSharp" Version="3.119.1" />
     <PackageVersion Include="SkiaSharp.Views" Version="3.119.1" />
     <PackageVersion Include="SkiaSharp.HarfBuzz" Version="3.119.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.1" />
     <PackageVersion Include="Avalonia" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Desktop" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.8" />
