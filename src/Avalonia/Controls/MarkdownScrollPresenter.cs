@@ -41,6 +41,8 @@ public class MarkdownScrollPresenter : Control, ILogicalScrollable
     private EventHandler? _scrollInvalidated;
     private bool _canHorizontallyScroll;
     private bool _canVerticallyScroll = true;
+    private Size _scrollSize = new(0, 24);
+    private Size _pageScrollSize = new(0, 240);
     private MarkdownTextChange _pendingTextChange = MarkdownTextChange.None;
     private int _pendingDocumentLength;
     private readonly List<TextRunLayout> _textRuns = new();
@@ -174,13 +176,9 @@ public class MarkdownScrollPresenter : Control, ILogicalScrollable
 
     bool ILogicalScrollable.IsLogicalScrollEnabled => true;
 
-    Size ILogicalScrollable.ScrollSize => new(
-        0,
-        Math.Max(1, _viewport.Height > 0 ? _viewport.Height / 10 : 24));
+    Size ILogicalScrollable.ScrollSize => _scrollSize;
 
-    Size ILogicalScrollable.PageScrollSize => new(
-        0,
-        Math.Max(1, _viewport.Height > 0 ? _viewport.Height * 0.9 : 240));
+    Size ILogicalScrollable.PageScrollSize => _pageScrollSize;
 
     Size IScrollable.Extent => _extent;
 
@@ -222,12 +220,13 @@ public class MarkdownScrollPresenter : Control, ILogicalScrollable
         if (viewportChanged)
         {
             _viewport = finalSize;
+            UpdateScrollMetrics();
         }
 
         EnsureLayout(canvasWidth);
         var offsetChanged = SetOffset(_offset, false);
 
-        if (viewportChanged || offsetChanged)
+        if (offsetChanged)
         {
             NotifyScrollChanged();
         }
@@ -499,6 +498,23 @@ public class MarkdownScrollPresenter : Control, ILogicalScrollable
         return true;
     }
 
+    private void UpdateScrollMetrics()
+    {
+        var verticalStep = Math.Max(1, _viewport.Height > 0 ? _viewport.Height / 10 : 24);
+        var pageStep = Math.Max(1, _viewport.Height > 0 ? _viewport.Height * 0.9 : 240);
+        var scrollSize = new Size(0, verticalStep);
+        var pageSize = new Size(0, pageStep);
+
+        if (scrollSize == _scrollSize && pageSize == _pageScrollSize)
+        {
+            return;
+        }
+
+        _scrollSize = scrollSize;
+        _pageScrollSize = pageSize;
+        NotifyScrollChanged();
+    }
+
     private void NotifyScrollChanged() => _scrollInvalidated?.Invoke(this, EventArgs.Empty);
 
     private TextRunLayout? HitTestTextRun(Point point)
@@ -617,6 +633,18 @@ public class MarkdownScrollPresenter : Control, ILogicalScrollable
         }
 
         ClearSelectionInternal();
+    }
+
+    internal void RequestRefresh(bool refreshScroll = false)
+    {
+        _layoutDirty = true;
+        InvalidateMeasure();
+        InvalidateVisual();
+
+        if (refreshScroll)
+        {
+            UpdateScrollMetrics();
+        }
     }
 
     private void ClearSelectionInternal()
