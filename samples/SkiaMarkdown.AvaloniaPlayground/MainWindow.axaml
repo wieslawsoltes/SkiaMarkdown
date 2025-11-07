@@ -37,7 +37,8 @@
 
         <Grid Grid.Row="1"
               Margin="0,0,12,0">
-            <avaloniaEdit:TextEditor Grid.Row="0"
+            <avaloniaEdit:TextEditor x:Name="MarkdownEditor"
+                                     Grid.Row="0"
                                      ShowLineNumbers="True"
                                      HorizontalScrollBarVisibility="Auto"
                                      VerticalScrollBarVisibility="Auto"
@@ -61,8 +62,16 @@
                         BorderBrush="{DynamicResource ThemeBorderLowBrush}"
                         BorderThickness="1"
                         Padding="4">
-                    <TreeView ItemsSource="{Binding MarkdownAst}"
-                              ItemTemplate="{StaticResource AstNodeTemplate}" />
+                    <TreeView x:Name="MarkdownTree"
+                              ItemsSource="{Binding MarkdownAst}"
+                              ItemTemplate="{StaticResource AstNodeTemplate}">
+                        <TreeView.Styles>
+                            <Style Selector="TreeViewItem">
+                                <Setter Property="IsExpanded"
+                                        Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                    </TreeView>
                 </Border>
             </TabItem>
             <TabItem Header="Roslyn AST">
@@ -70,8 +79,16 @@
                         BorderBrush="{DynamicResource ThemeBorderLowBrush}"
                         BorderThickness="1"
                         Padding="4">
-                    <TreeView ItemsSource="{Binding RoslynAst}"
-                              ItemTemplate="{StaticResource AstNodeTemplate}" />
+                    <TreeView x:Name="RoslynTree"
+                              ItemsSource="{Binding RoslynAst}"
+                              ItemTemplate="{StaticResource AstNodeTemplate}">
+                        <TreeView.Styles>
+                            <Style Selector="TreeViewItem">
+                                <Setter Property="IsExpanded"
+                                        Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                    </TreeView>
                 </Border>
             </TabItem>
         </TabControl>
