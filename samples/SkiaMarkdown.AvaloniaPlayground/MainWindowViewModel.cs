@@ -266,7 +266,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             children.Add(CreateTokenNode(token));
         }
 
-        return AstNodeViewModel.Create(node.Kind.ToString(), null, children, GetRoslynSpan(node));
+        return AstNodeViewModel.Create(node.Kind.ToString(), null, children, ToSourceSpan(node.Span));
     }
 
     private static AstNodeViewModel CreateTokenNode(MarkdownSyntaxToken token)
@@ -283,7 +283,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
         AppendTriviaNodes(children, token.TrailingTrivia, ref offset, "Trailing");
 
-        return AstNodeViewModel.Create($"Token: {token.Kind}", null, children, textSpan);
+        return AstNodeViewModel.Create($"Token: {token.Kind}", null, children, ToSourceSpan(token.Span));
     }
 
     private static void AppendTriviaNodes(
@@ -320,45 +320,6 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             .Replace("\r", "\\r", StringComparison.Ordinal)
             .Replace("\n", "\\n", StringComparison.Ordinal)
             .Replace("\t", "\\t", StringComparison.Ordinal);
-    }
-
-    private static SourceSpan GetRoslynSpan(MarkdownSyntaxNode node)
-    {
-        if (node is MarkdownSyntaxToken token)
-        {
-            return GetTokenTextSpan(token);
-        }
-
-        var tokens = EnumerateDescendantTokens(node).ToList();
-        if (tokens.Count == 0)
-        {
-            var fallback = node.Span;
-            return new SourceSpan(fallback.Start, fallback.Length);
-        }
-
-        var startSpan = GetTokenTextSpan(tokens.First());
-        var endSpan = GetTokenTextSpan(tokens.Last());
-        var start = startSpan.Start;
-        var end = Math.Max(start, endSpan.End);
-        return new SourceSpan(start, end - start);
-    }
-
-    private static IEnumerable<MarkdownSyntaxToken> EnumerateDescendantTokens(MarkdownSyntaxNode node)
-    {
-        foreach (var element in node.ChildNodesAndTokens())
-        {
-            if (element.IsToken)
-            {
-                yield return element.AsToken();
-            }
-            else
-            {
-                foreach (var nested in EnumerateDescendantTokens(element.AsNode()))
-                {
-                    yield return nested;
-                }
-            }
-        }
     }
 
     private static SourceSpan GetTokenTextSpan(MarkdownSyntaxToken token)
