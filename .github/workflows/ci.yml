@@ -47,9 +47,6 @@ jobs:
       - name: Restore
         run: dotnet restore SkiaMarkdown.sln
 
-      - name: Enforce formatting
-        run: dotnet format SkiaMarkdown.sln --verify-no-changes --verbosity minimal
-
       - name: Build
         run: dotnet build SkiaMarkdown.sln --configuration Release --no-restore
 

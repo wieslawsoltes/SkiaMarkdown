@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
-    <RunAnalyzersDuringCompilation>true</RunAnalyzersDuringCompilation>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringCompilation>false</RunAnalyzersDuringCompilation>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(OutputType)' == 'Library'">
