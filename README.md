@@ -26,6 +26,15 @@ SkiaMarkdown is a GitHub Flavored Markdown (GFM) pipeline that parses Markdown i
 | `benchmarks/` | BenchmarkDotNet harness for parser and renderer profiling. |
 | `docs/` | Roadmaps, compatibility toggles, spec notes, and architectural plans. |
 
+## NuGet packages
+| Package | Description | NuGet |
+| --- | --- | --- |
+| `SkiaMarkdown.Core` | Core parser pipeline, tokenizer, buffers, dependency injection helpers, and extensibility primitives. | [![NuGet](https://img.shields.io/nuget/v/SkiaMarkdown.Core.svg?logo=nuget)](https://www.nuget.org/packages/SkiaMarkdown.Core/) |
+| `SkiaMarkdown.Syntax` | Shared syntax tree types, kind tables, and Roslyn-style AST helpers consumed by other layers. | [![NuGet](https://img.shields.io/nuget/v/SkiaMarkdown.Syntax.svg?logo=nuget)](https://www.nuget.org/packages/SkiaMarkdown.Syntax/) |
+| `SkiaMarkdown.Rendering` | SkiaSharp-based renderer with GPU-friendly drawing primitives and text shaping. | [![NuGet](https://img.shields.io/nuget/v/SkiaMarkdown.Rendering.svg?logo=nuget)](https://www.nuget.org/packages/SkiaMarkdown.Rendering/) |
+| `SkiaMarkdown.Html` | Markdown-to-HTML bridge, spec compliance helpers, and HTML snapshot generator. | [![NuGet](https://img.shields.io/nuget/v/SkiaMarkdown.Html.svg?logo=nuget)](https://www.nuget.org/packages/SkiaMarkdown.Html/) |
+| `SkiaMarkdown.Avalonia` | Avalonia control implementations for live Markdown previews across desktop and web. | [![NuGet](https://img.shields.io/nuget/v/SkiaMarkdown.Avalonia.svg?logo=nuget)](https://www.nuget.org/packages/SkiaMarkdown.Avalonia/) |
+
 ## Getting started
 ### Prerequisites
 - .NET SDK 9.0.301 or newer (the repo pins this in `global.json`).
