@@ -379,10 +379,16 @@ namespace SkiaMarkdown.Syntax.Parsing
             var segments = EnumerateTableSegments(slice);
             var cells = new List<GreenNode?>(segments.Count);
 
-            foreach (var segment in segments)
+            for (var i = 0; i < segments.Count; i++)
             {
+                var segment = segments[i];
                 var cellSlice = segment.Length > 0 ? slice.Slice(segment.StartOffset, segment.Length) : ReadOnlySpan<char>.Empty;
                 var cellText = cellSlice.Trim();
+                if (i == segments.Count - 1 && cellText.Length == 0)
+                {
+                    continue;
+                }
+
                 var inlineList = InlineMarkdownParser.Parse(cellText, options);
                 cells.Add(MarkdownSyntaxFactory.Node(MarkdownSyntaxKind.TableCell, inlineList));
             }
@@ -397,10 +403,16 @@ namespace SkiaMarkdown.Syntax.Parsing
             var segments = EnumerateTableSegments(slice);
             var cells = new List<GreenNode?>(segments.Count);
 
-            foreach (var segment in segments)
+            for (var i = 0; i < segments.Count; i++)
             {
+                var segment = segments[i];
                 var cellSlice = segment.Length > 0 ? slice.Slice(segment.StartOffset, segment.Length) : ReadOnlySpan<char>.Empty;
                 var trimmed = cellSlice.Trim();
+                if (i == segments.Count - 1 && trimmed.Length == 0)
+                {
+                    continue;
+                }
+
                 var alignment = DetermineTableAlignment(trimmed, options.EnableTableAlignment);
                 var alignmentToken = MarkdownSyntaxFactory.Token(MarkdownSyntaxKind.TableAlignmentToken, alignment);
                 var rawToken = MarkdownSyntaxFactory.Token(MarkdownSyntaxKind.TextToken, trimmed.ToString());

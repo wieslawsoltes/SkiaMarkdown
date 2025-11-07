@@ -19,11 +19,12 @@ public class GitHubExtensionsSyntaxTests
         var root = tree.GetRoot();
         var table = root.ChildNodes().First(node => node.Kind == MarkdownSyntaxKind.TableBlock);
 
-        var paragraphNode = table.ChildNodes().First(n => n.Kind == MarkdownSyntaxKind.TableHeader);
-        Assert.Equal(MarkdownSyntaxKind.TableHeader, paragraphNode.Kind);
+        var header = table.ChildNodes().First(n => n.Kind == MarkdownSyntaxKind.TableHeader);
+        Assert.Equal(MarkdownSyntaxKind.TableHeader, header.Kind);
 
         var delimiterRow = table.ChildNodes().First(n => n.Kind == MarkdownSyntaxKind.TableDelimiterRow);
         var alignmentTokens = delimiterRow.ChildNodes()
+            .SelectMany(n => n.ChildNodes())
             .SelectMany(n => n.ChildNodesAndTokens())
             .Where(e => e.IsToken && e.AsToken().Kind == MarkdownSyntaxKind.TableAlignmentToken)
             .Select(e => e.AsToken().Text)

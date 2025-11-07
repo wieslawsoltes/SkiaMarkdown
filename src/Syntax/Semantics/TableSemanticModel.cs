@@ -49,7 +49,7 @@ namespace SkiaMarkdown.Syntax.Semantics
             List<MarkdownDiagnostic> diagnostics)
         {
             var cells = new List<MarkdownTableCellSemantic>();
-            foreach (var cellNode in rowNode.ChildNodes().Where(n => n.Kind == MarkdownSyntaxKind.TableCell))
+            foreach (var cellNode in EnumerateChildren(rowNode, MarkdownSyntaxKind.TableCell))
             {
                 var cellSemantics = InlineSemanticModelBuilder.Build(cellNode, options, out var cellDiagnostics);
                 diagnostics.AddRange(cellDiagnostics);
@@ -62,7 +62,7 @@ namespace SkiaMarkdown.Syntax.Semantics
         private static IReadOnlyList<MarkdownTableColumnAlignment> ExtractAlignments(MarkdownSyntaxNode delimiterNode)
         {
             var alignments = new List<MarkdownTableColumnAlignment>();
-            foreach (var cell in delimiterNode.ChildNodes().Where(n => n.Kind == MarkdownSyntaxKind.TableDelimiterCell))
+            foreach (var cell in EnumerateChildren(delimiterNode, MarkdownSyntaxKind.TableDelimiterCell))
             {
                 var token = cell.ChildNodesAndTokens()
                     .FirstOrDefault(e => e.IsToken && e.AsToken().Kind == MarkdownSyntaxKind.TableAlignmentToken);
@@ -82,6 +82,24 @@ namespace SkiaMarkdown.Syntax.Semantics
             }
 
             return alignments;
+        }
+
+        private static IEnumerable<MarkdownSyntaxNode> EnumerateChildren(MarkdownSyntaxNode node, MarkdownSyntaxKind kind)
+        {
+            foreach (var child in node.ChildNodes())
+            {
+                if (child.Kind == kind)
+                {
+                    yield return child;
+                }
+                else if (child.Kind == MarkdownSyntaxKind.SyntaxList)
+                {
+                    foreach (var nested in EnumerateChildren(child, kind))
+                    {
+                        yield return nested;
+                    }
+                }
+            }
         }
     }
 }

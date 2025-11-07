@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>SkiaMarkdown.Html</AssemblyName>
+    <RootNamespace>SkiaMarkdown.Html</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Syntax\SkiaMarkdown.Syntax.csproj" />
+  </ItemGroup>
+</Project>

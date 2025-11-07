@@ -61,14 +61,19 @@ namespace SkiaMarkdown.Syntax.Red
 
         public virtual void Accept(MarkdownSyntaxVisitor visitor) => visitor.DefaultVisit(this);
 
-        internal static MarkdownSyntaxNode Create(MarkdownSyntaxNode? parent, GreenNode green, int position)
+        internal static MarkdownSyntaxNode Create(MarkdownSyntaxNode? parent, GreenNode green, int position) =>
+            CreateChildNode(parent, green, position);
+
+        private static MarkdownSyntaxNode CreateChildNode(MarkdownSyntaxNode? parent, GreenNode green, int position)
         {
             if (green.IsToken)
             {
                 return new MarkdownSyntaxToken(parent, (GreenToken)green, position);
             }
 
-            return new MarkdownSyntaxInternalNode(parent, green, position);
+            return green.Kind == MarkdownSyntaxKind.MarkdownDocument
+                ? new MarkdownDocumentSyntaxNode(parent, green, position)
+                : new MarkdownSyntaxInternalNode(parent, green, position);
         }
 
         private sealed class MarkdownSyntaxInternalNode : MarkdownSyntaxNode
@@ -90,7 +95,7 @@ namespace SkiaMarkdown.Syntax.Red
                         continue;
                     }
 
-                    var child = CreateInternal(this, childGreen, current);
+                    var child = CreateChildNode(this, childGreen, current);
                     yield return child.IsToken
                         ? new MarkdownSyntaxElement((MarkdownSyntaxToken)child)
                         : new MarkdownSyntaxElement(child);
@@ -98,11 +103,60 @@ namespace SkiaMarkdown.Syntax.Red
                     current += childGreen.FullWidth;
                 }
             }
+        }
 
-            private static MarkdownSyntaxNode CreateInternal(MarkdownSyntaxNode parent, GreenNode childGreen, int position) =>
-                childGreen.IsToken
-                    ? new MarkdownSyntaxToken(parent, (GreenToken)childGreen, position)
-                    : new MarkdownSyntaxInternalNode(parent, childGreen, position);
+        private sealed class MarkdownDocumentSyntaxNode : MarkdownSyntaxNode
+        {
+            public MarkdownDocumentSyntaxNode(MarkdownSyntaxNode? parent, GreenNode green, int position)
+                : base(parent, green, position)
+            {
+            }
+
+            public override IEnumerable<MarkdownSyntaxElement> ChildNodesAndTokens()
+            {
+                if (GreenNode.SlotCount == 0)
+                {
+                    yield break;
+                }
+
+                var listNode = GreenNode.GetSlot(0);
+                if (listNode is GreenListNode list)
+                {
+                    var current = Span.Start;
+                    for (var i = 0; i < list.SlotCount; i++)
+                    {
+                        var childGreen = list.GetSlot(i);
+                        if (childGreen is null)
+                        {
+                            continue;
+                        }
+
+                        var child = CreateChildNode(this, childGreen, current);
+                        yield return child.IsToken
+                            ? new MarkdownSyntaxElement((MarkdownSyntaxToken)child)
+                            : new MarkdownSyntaxElement(child);
+                        current += childGreen.FullWidth;
+                    }
+
+                    yield break;
+                }
+
+                var fallback = Span.Start;
+                for (var i = 0; i < GreenNode.SlotCount; i++)
+                {
+                    var childGreen = GreenNode.GetSlot(i);
+                    if (childGreen is null)
+                    {
+                        continue;
+                    }
+
+                    var child = CreateChildNode(this, childGreen, fallback);
+                    yield return child.IsToken
+                        ? new MarkdownSyntaxElement((MarkdownSyntaxToken)child)
+                        : new MarkdownSyntaxElement(child);
+                    fallback += childGreen.FullWidth;
+                }
+            }
         }
     }
 }

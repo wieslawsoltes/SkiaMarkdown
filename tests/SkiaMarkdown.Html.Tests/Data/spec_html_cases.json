@@ -1,0 +1,140 @@
+[
+  {
+    "number": 1,
+    "section": "Paragraphs",
+    "markdown": "Hello world\n",
+    "expectedHtml": "<p>Hello world</p>\n"
+  },
+  {
+    "number": 32,
+    "section": "ATX Headings",
+    "markdown": "# Heading\n",
+    "expectedHtml": "<h1>Heading</h1>\n"
+  },
+  {
+    "number": 71,
+    "section": "Setext Headings",
+    "markdown": "Heading\n====",
+    "expectedHtml": "<h1>Heading</h1>\n"
+  },
+  {
+    "number": 85,
+    "section": "Thematic Breaks",
+    "markdown": "---\n",
+    "expectedHtml": "<hr />\n"
+  },
+  {
+    "number": 120,
+    "section": "Block Quotes",
+    "markdown": "> quote\n",
+    "expectedHtml": "<blockquote>\n<p>quote</p>\n</blockquote>\n"
+  },
+  {
+    "number": 150,
+    "section": "Ordered Lists",
+    "markdown": "1. one\n2. two\n",
+    "expectedHtml": "<ol>\n<li>one\n</li>\n<li>two\n</li>\n</ol>\n"
+  },
+  {
+    "number": 170,
+    "section": "Indented Code Blocks",
+    "markdown": "    code\n    line\n",
+    "expectedHtml": "<pre><code>code\nline\n</code></pre>\n"
+  },
+  {
+    "number": 198,
+    "section": "Tables",
+    "markdown": "| h1 | h2 |\n| :-- | --: |\n| c1 | c2 |\n",
+    "expectedHtml": "<table>\n<thead>\n<tr><th style=\"text-align:left\">h1</th><th style=\"text-align:right\">h2</th></tr>\n</thead>\n<tbody>\n<tr><td style=\"text-align:left\">c1</td><td style=\"text-align:right\">c2</td></tr>\n</tbody>\n</table>\n"
+  },
+  {
+    "number": 210,
+    "section": "HTML Blocks",
+    "markdown": "<div>raw</div>\n",
+    "expectedHtml": "<div>raw</div>\n\n"
+  },
+  {
+    "number": 230,
+    "section": "Links",
+    "markdown": "See [link](https://example.com \"title\")\n",
+    "expectedHtml": "<p>See <a href=\"https://example.com\" title=\"title\">link</a></p>\n"
+  },
+  {
+    "number": 240,
+    "section": "Images",
+    "markdown": "Look ![alt](img.png \"title\")\n",
+    "expectedHtml": "<p>Look <img src=\"img.png\" alt=\"alt\" title=\"title\" /></p>\n"
+  },
+  {
+    "number": 250,
+    "section": "Autolinks",
+    "markdown": "Visit <https://example.com>\n",
+    "expectedHtml": "<p>Visit <a href=\"https://example.com\">https://example.com</a></p>\n"
+  },
+  {
+    "number": 260,
+    "section": "Emphasis and Strong",
+    "markdown": "*em* **strong**\n",
+    "expectedHtml": "<p><em>em</em> <strong>strong</strong></p>\n"
+  },
+  {
+    "number": 270,
+    "section": "Code Spans",
+    "markdown": "Use `code`\n",
+    "expectedHtml": "<p>Use <code>code</code></p>\n"
+  },
+  {
+    "number": 280,
+    "section": "Strikethrough",
+    "markdown": "~~old~~\n",
+    "expectedHtml": "<p><del>old</del></p>\n"
+  },
+  {
+    "number": 285,
+    "section": "Highlight",
+    "markdown": "==focus==\n",
+    "expectedHtml": "<p><mark>focus</mark></p>\n"
+  },
+  {
+    "number": 290,
+    "section": "Hard Line Breaks",
+    "markdown": "line  \nbreak\n",
+    "expectedHtml": "<p>line  <br />\nbreak</p>\n"
+  },
+  {
+    "number": 300,
+    "section": "Entities",
+    "markdown": "&copy; &amp;\n",
+    "expectedHtml": "<p>\u00a9 &amp;</p>\n"
+  },
+  {
+    "number": 310,
+    "section": "Emoji",
+    "markdown": ":smile:\n",
+    "expectedHtml": "<p><span class=\"emoji\" data-emoji=\"smile\">:smile:</span></p>\n"
+  },
+  {
+    "number": 320,
+    "section": "Mentions",
+    "markdown": "@user says\n",
+    "expectedHtml": "<p><span class=\"mention\" data-mention=\"user\">@user</span> says</p>\n"
+  },
+  {
+    "number": 330,
+    "section": "Task List Items",
+    "markdown": "- [x] done\n- [ ] todo\n",
+    "expectedHtml": "<ul>\n<li><input type=\"checkbox\" disabled checked /> done\n</li>\n<li><input type=\"checkbox\" disabled /> todo\n</li>\n</ul>\n"
+  },
+  {
+    "number": 340,
+    "section": "Fenced Code Blocks",
+    "markdown": "```csharp\nConsole.WriteLine();\n```\n",
+    "expectedHtml": "<pre><code class=\"language-csharp\">Console.WriteLine();</code></pre>\n"
+  },
+  {
+    "number": 345,
+    "section": "Footnotes",
+    "markdown": "Here is a footnote reference.[^1]\n\n[^1]: Footnote text.\n",
+    "expectedHtml": "<p>Here is a footnote reference.<sup id=\"fnref:1\" class=\"footnote-ref\"><a href=\"#fn:1\" data-footnote-ref>1</a></sup></p>\n<section class=\"footnotes\" data-footnotes>\n<hr />\n<ol>\n<li id=\"fn:1\"><p>Footnote text.</p>\n <a href=\"#fnref:1\" class=\"footnote-backref\" aria-label=\"Back to content\">\u21a9</a></li>\n</ol>\n</section>\n"
+  }
+]

@@ -323,6 +323,11 @@ namespace SkiaMarkdown.Syntax.Parsing
                 return false;
             }
 
+            if (closing <= searchStart)
+            {
+                return false;
+            }
+
             var inner = text.Slice(searchStart, closing - searchStart);
             var innerNodes = new List<GreenNode?>();
             ParseInternal(inner, innerNodes, options);

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
 using SkiaMarkdown.Syntax;
 using SkiaMarkdown.Syntax.Semantics;
 using SkiaMarkdown.Syntax.Red;
@@ -52,9 +53,12 @@ public class GitHubSpecTests
 
     private static string Flatten(IEnumerable<MarkdownInlineSemantic> semantics)
     {
+        var list = semantics as IReadOnlyList<MarkdownInlineSemantic> ?? semantics.ToList();
         var builder = new StringBuilder();
-        foreach (var inline in semantics)
+        for (var i = 0; i < list.Count; i++)
         {
+            var inline = list[i];
+            var isLast = i == list.Count - 1;
             switch (inline)
             {
                 case TextInlineSemantic text:
@@ -91,7 +95,10 @@ public class GitHubSpecTests
                     builder.Append(WebUtility.HtmlDecode(entity.Value));
                     break;
                 case BreakInlineSemantic br:
-                    builder.Append(br.IsHard ? "\n" : " ");
+                    if (!isLast)
+                    {
+                        builder.Append(br.IsHard ? "\n" : " ");
+                    }
                     break;
                 case TaskListMarkerInlineSemantic task:
                     builder.Append(task.IsChecked ? "[x]" : "[ ]");
