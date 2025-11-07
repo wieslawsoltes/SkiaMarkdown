@@ -1,0 +1,54 @@
+name: Pack
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  ContinuousIntegrationBuild: true
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: pack-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props') }}
+          restore-keys: |
+            pack-nuget-
+
+      - name: Restore
+        run: dotnet restore SkiaMarkdown.sln
+
+      - name: Build
+        run: dotnet build SkiaMarkdown.sln --configuration Release --no-restore
+
+      - name: Pack
+        run: |
+          dotnet pack SkiaMarkdown.sln \
+            --configuration Release \
+            --no-build \
+            --output artifacts/packages \
+            -p:ContinuousIntegrationBuild=true \
+            -p:IncludeSymbols=true \
+            -p:SymbolPackageFormat=snupkg
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages
+          if-no-files-found: error

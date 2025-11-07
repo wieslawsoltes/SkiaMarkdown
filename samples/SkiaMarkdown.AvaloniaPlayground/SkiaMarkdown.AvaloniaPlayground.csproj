@@ -8,6 +8,7 @@
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <CompileAvaloniaXaml>true</CompileAvaloniaXaml>
     <EnableAvaloniaXamlCompilation>true</EnableAvaloniaXamlCompilation>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,6 @@
     <AssemblyName>SkiaMarkdown.Avalonia</AssemblyName>
     <RootNamespace>SkiaMarkdown.Avalonia</RootNamespace>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
