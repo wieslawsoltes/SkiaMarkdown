@@ -53,8 +53,11 @@
                         BorderBrush="{DynamicResource ThemeBorderLowBrush}"
                         BorderThickness="1"
                         Padding="0">
-                    <controls:MarkdownView CanvasWidth="920"
-                                           Markdown="{Binding MarkdownSource}" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto">
+                        <controls:MarkdownView CanvasWidth="920"
+                                               Markdown="{Binding MarkdownSource}" />
+                    </ScrollViewer>
                 </Border>
             </TabItem>
             <TabItem Header="Markdown AST">
