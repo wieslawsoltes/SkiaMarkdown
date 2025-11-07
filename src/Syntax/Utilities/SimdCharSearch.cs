@@ -12,6 +12,28 @@ namespace SkiaMarkdown.Syntax.Utilities
     /// </summary>
     internal static class SimdCharSearch
     {
+        private static readonly bool VectorSearchSupported;
+
+        static SimdCharSearch()
+        {
+            if (Vector128.IsHardwareAccelerated && Vector128<ushort>.IsSupported)
+            {
+                try
+                {
+                    _ = Vector128.Create((ushort)0);
+                    VectorSearchSupported = true;
+                }
+                catch (NotSupportedException)
+                {
+                    VectorSearchSupported = false;
+                }
+            }
+            else
+            {
+                VectorSearchSupported = false;
+            }
+        }
+
         public static int IndexOfAny(ReadOnlySpan<char> span, ReadOnlySpan<char> values)
         {
             if (values.IsEmpty)
@@ -19,7 +41,7 @@ namespace SkiaMarkdown.Syntax.Utilities
                 return -1;
             }
 
-            if (Vector128.IsHardwareAccelerated && span.Length >= Vector128<ushort>.Count)
+            if (VectorSearchSupported && span.Length >= Vector128<ushort>.Count)
             {
                 var result = IndexOfAnyVector(span, values);
                 if (result >= 0)
@@ -75,7 +97,11 @@ namespace SkiaMarkdown.Syntax.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Vector128<ushort> LoadVector(ref char source, int index) =>
-            Vector128.LoadUnsafe(ref Unsafe.Add(ref source, index)).AsUInt16();
+        private static Vector128<ushort> LoadVector(ref char source, int index)
+        {
+            // Vector128.LoadUnsafe does not accept char directly, so reinterpret as ushort.
+            ref var ushortSource = ref Unsafe.As<char, ushort>(ref source);
+            return Vector128.LoadUnsafe(ref Unsafe.Add(ref ushortSource, index));
+        }
     }
 }
