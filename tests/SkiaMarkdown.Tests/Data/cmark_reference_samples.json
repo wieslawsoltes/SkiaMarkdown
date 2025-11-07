@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Paragraph",
+    "markdown": "Hello **world**!"
+  },
+  {
+    "name": "Table Alignment",
+    "markdown": "| Left | Center | Right |\n|:-----|:------:|------:|\n| a    | b      | c     |"
+  },
+  {
+    "name": "Footnote",
+    "markdown": "Here is a footnote reference.[^1]\n\n[^1]: Footnote text."
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "number": 1,
+    "section": "Paragraphs",
+    "markdown": "Hello world",
+    "expectedText": "Hello world"
+  },
+  {
+    "number": 2,
+    "section": "Emphasis and strong",
+    "markdown": "This is **strong** and *emphasis* text.",
+    "expectedText": "This is strong and emphasis text."
+  },
+  {
+    "number": 3,
+    "section": "Links",
+    "markdown": "[link](https://example.com)",
+    "expectedText": "link"
+  },
+  {
+    "number": 4,
+    "section": "Entities",
+    "markdown": "Fish &amp; Chips",
+    "expectedText": "Fish & Chips"
+  },
+  {
+    "number": 5,
+    "section": "Footnotes",
+    "markdown": "Here is a footnote reference.[^1]\n\n[^1]: Footnote text.",
+    "expectedText": "Here is a footnote reference.[1]Footnote text."
+  }
+]
